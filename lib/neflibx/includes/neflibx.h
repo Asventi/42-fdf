@@ -77,6 +77,7 @@ int				put_pixel_img(t_image *image, int x, int y, int color);
 int				destroy_image(t_image *image);
 
 // Graphic operations
+t_point			point(int x, int y, int color);
 int				draw_line(t_point pt1, t_point pt2, t_image *img);
 
 #endif

@@ -22,9 +22,9 @@
 # include <stdbool.h>
 
 int		add_stock(char **stock, char *buf, size_t count);
-char	*ft_strchr(char *s, int c);
+char	*gnl_strchr(char *s, int c);
 char	*ft_strndup(char *s, size_t n);
-size_t	ft_strlen(char *str);
+size_t	gnl_strlen(char *str);
 void	free_stock(char **stock);
 
 #endif

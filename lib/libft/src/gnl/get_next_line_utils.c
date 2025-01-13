@@ -13,7 +13,7 @@
 #include "get_next_line.h"
 #include <stdlib.h>
 
-char	*ft_strchr(char *s, int c)
+char	*gnl_strchr(char *s, int c)
 {
 	while (*s)
 	{
@@ -27,7 +27,7 @@ char	*ft_strchr(char *s, int c)
 		return (NULL);
 }
 
-size_t	ft_strlen(char *str)
+size_t	gnl_strlen(char *str)
 {
 	size_t	c;
 
@@ -47,7 +47,7 @@ char	*ft_strndup(char *s, size_t n)
 
 	if (!s)
 		return (0);
-	slen = ft_strlen(s);
+	slen = gnl_strlen(s);
 	if (slen > n)
 		slen = n;
 	dup = malloc(slen + 1 * sizeof (char));
@@ -70,7 +70,7 @@ int	add_stock(char **stock, char *buf, size_t count)
 	size_t	stock_len;
 	char	*res;
 
-	stock_len = ft_strlen(*stock);
+	stock_len = gnl_strlen(*stock);
 	res = malloc(stock_len + count + 1);
 	if (!res)
 		return (-1);

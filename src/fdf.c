@@ -14,6 +14,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <X11/X.h>
 
 #include "utils.h"
 #include "neflibx.h"
@@ -57,9 +59,9 @@ int	key_hook(int keycode, t_data *data)
 	return (0);
 }
 
-int	mouse_hook(int keymouse, t_data *data)
+int	cross_close(t_data *data)
 {
-	printf("Mousecode: %d\n", keymouse);
+	clean_data(data);
 	return (0);
 }
 
@@ -67,8 +69,12 @@ int	main(int c, char **args)
 {
 	t_data		data;
 
-	init(&data, 960, 540);
-	mlx_key_hook(data.win->win, key_hook, &data);
+	data.h = 0;
+	data.tab2d = 0;
+	parse(&data, args[1]);
+	init(&data, 1920, 1080);
+	mlx_hook(data.win->win, KeyPress, KeyPressMask, key_hook, &data);
+	mlx_hook(data.win->win, DestroyNotify, StructureNotifyMask, cross_close, &data);
 	mlx_loop(data.display->mlx);
 	clean_data(&data);
 }

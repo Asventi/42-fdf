@@ -47,7 +47,7 @@ SYS_LIBS	:=	$(addprefix -l, $(SYS_LIBS))
 
 INCS_DIR	=	includes/
 INCLUDES	=	$(INCS_DIR) \
-				$(addprefix $(dir $(LIBS_PATH)), $(INCS_DIR)) \
+				$(addsuffix $(INCS_DIR), $(dir $(LIBS_PATH))) \
 				$(dir $(LIBS_PATH))
 
 # ===============CONFIGS=============== #

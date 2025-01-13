@@ -21,7 +21,7 @@ static char	*get_from_stock(char *stock)
 
 	if (!stock)
 		return (0);
-	delimiter = ft_strchr(stock, '\n');
+	delimiter = gnl_strchr(stock, '\n');
 	if (!delimiter)
 		return (0);
 	res = ft_strndup(stock, (size_t)(delimiter - stock + 1));
@@ -35,15 +35,15 @@ static int	remove_from_stock(char **stock, bool end)
 	char	*res;
 	char	*delimiter;
 
-	delimiter = ft_strchr(*stock, '\n');
-	if (end && (!delimiter || ft_strlen(delimiter + 1) == 0))
+	delimiter = gnl_strchr(*stock, '\n');
+	if (end && (!delimiter || gnl_strlen(delimiter + 1) == 0))
 	{
 		free_stock(stock);
 		return (0);
 	}
 	if (!delimiter)
 		return (0);
-	res = ft_strndup(delimiter + 1, ft_strlen(delimiter + 1));
+	res = ft_strndup(delimiter + 1, gnl_strlen(delimiter + 1));
 	if (!res)
 		return (-1);
 	free(*stock);
@@ -68,7 +68,7 @@ static char	*get_line(char *buf, ssize_t count)
 		return (buf);
 	if (!line && (count < BUFFER_SIZE))
 	{
-		line = ft_strndup(stock, ft_strlen(stock));
+		line = ft_strndup(stock, gnl_strlen(stock));
 		free_stock(&stock);
 		if (!line)
 			return (buf);
