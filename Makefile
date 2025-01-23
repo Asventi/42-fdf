@@ -29,6 +29,9 @@ DEPS			=	$(patsubst %.c, $(BUILD_DIR)%.d, $(SRC))
 SRC 		=	fdf.c \
 				hooks.c \
 
+SRC_BONUS	=	fdf_bonus.c \
+				hooks_bonus.c \
+
 # ================UTILS================ #
 
 SRC += $(addprefix $(UTILS_DIR), $(UTILS_SRC))
@@ -76,7 +79,7 @@ MAKEFLAGS	+=	--no-print-directory
 
 # ================MODES================ #
 
-MODES		:= debug fsanitize optimize full-optimize
+MODES		:= debug fsanitize optimize full-optimize bonus
 
 MODE_TRACE	:= $(BUILD_DIR).mode_trace
 LAST_MODE	:= $(shell cat $(MODE_TRACE) 2>/dev/null)
@@ -97,6 +100,8 @@ else ifeq ($(MODE), optimize)
 	CFLAGS += -O3
 else ifeq ($(MODE), full-optimize)
 	CFLAGS += -Ofast
+else ifeq ($(MODE), bonus)
+	SRC := $(SRC_BONUS) $(filter-out $(patsubst %_bonus.c, %.c, $(SRC_BONUS)), $(SRC))
 else ifneq ($(MODE),)
 	ERROR = MODE
 endif

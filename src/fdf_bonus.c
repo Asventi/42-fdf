@@ -95,6 +95,7 @@ int	main(int c, char **args)
 	mlx_hook(data.win->win, KeyPress, KeyPressMask, key_hook, &data);
 	mlx_hook(data.win->win, DestroyNotify, StructureNotifyMask,
 		clean_data, &data);
+	mlx_hook(data.win->win, ButtonPress, ButtonPressMask, mouse_hook, &data);
 	render(&data);
 	mlx_loop(data.display->mlx);
 	clean_data(&data);
