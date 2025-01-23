@@ -13,6 +13,20 @@
 #include "libft.h"
 #include <stdlib.h>
 
+int	free_split(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i] != 0)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	return (0);
+}
+
 static char	**free_all(char **res, int c)
 {
 	int	i;

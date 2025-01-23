@@ -5,35 +5,55 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pjarnac <pjarnac@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/07 10:52:46 by pjarnac           #+#    #+#             */
-/*   Updated: 2025/01/07 10:52:46 by pjarnac          ###   ########.fr       */
+/*   Created: 2025/01/15 17:17:48 by pjarnac           #+#    #+#             */
+/*   Updated: 2025/01/15 17:17:48 by pjarnac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <neflibx.h>
+#include <libft.h>
+#include <stdint.h>
 
-int32_t	get_argb(unsigned char a, unsigned char r,
-						unsigned char g, unsigned char b)
+static int	is_color(char *str)
 {
-	return ((int32_t)a << 24 | (int32_t)r << 16 | (int32_t)g << 8 | (int32_t)b);
+	while (*str)
+	{
+		if (*str == 'x')
+		{
+			return (1);
+		}
+		str++;
+	}
+	return (0);
 }
 
-unsigned char	get_a(int32_t color)
+static int32_t	get_hex(char c)
 {
-	return (color >> 24 & 0xFF);
+	int32_t	i;
+
+	i = 0;
+	while (i < 16)
+	{
+		if ("0123456789ABCDEF"[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
-unsigned char	get_r(int32_t color)
+int32_t	hex_to_color(char *str)
 {
-	return (color >> 16 & 0xFF);
-}
+	int32_t	res;
+	int32_t	len;
 
-unsigned char	get_g(int32_t color)
-{
-	return (color >> 8 & 0xFF);
-}
-
-unsigned char	get_b(int32_t color)
-{
-	return (color & 0xFF);
+	res = 0;
+	len = (int32_t)ft_strlen(str);
+	if (!is_color(str))
+		return (0xFFFFFF);
+	while (len > 0 && str[len - 1] != 'x')
+	{
+		res *= 16;
+		res += get_hex(str[len - 1]);
+		len--;
+	}
+	return (res);
 }

@@ -13,6 +13,8 @@
 #ifndef UTILS_H
 # define UTILS_H
 
-void	exit_error(char *err, int code);
+int		freei(void	*ptr);
+void	exit_error(char *err, int code, ...);
+int		hex_to_color(char *str);
 
 #endif

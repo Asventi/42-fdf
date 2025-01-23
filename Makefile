@@ -27,6 +27,7 @@ DEPS			=	$(patsubst %.c, $(BUILD_DIR)%.d, $(SRC))
 # ================ROOT================= #
 
 SRC 		=	fdf.c \
+				hooks.c \
 
 # ================UTILS================ #
 
@@ -35,6 +36,14 @@ SRC += $(addprefix $(UTILS_DIR), $(UTILS_SRC))
 UTILS_DIR =		utils/
 UTILS_SRC =		parse.c \
 				errors.c \
+				colors.c \
+
+# ==============RENDERING============== #
+
+SRC += $(addprefix $(RENDERING_DIR), $(RENDERING_SRC))
+
+RENDERING_DIR =		rendering/
+RENDERING_SRC =		render.c \
 
 # ==========LIBS / INCLUDES============ #
 
@@ -42,7 +51,7 @@ LIBS_DIR	=	lib/
 LIBS_PATH	=	libft/libft.a minilibx/libmlx.a neflibx/libneflibx.a
 LIBS_PATH	:=	$(addprefix $(LIBS_DIR), $(LIBS_PATH))
 LIBS		=	$(patsubst lib%.a, %, $(notdir $(LIBS_PATH)))
-SYS_LIBS	=	Xext X11
+SYS_LIBS	=	Xext X11 m
 SYS_LIBS	:=	$(addprefix -l, $(SYS_LIBS))
 
 INCS_DIR	=	includes/
@@ -81,13 +90,13 @@ else
 endif
 
 ifeq ($(MODE), debug)
-	CFLAGS = -g3
+	CFLAGS = -g3 -Og
 else ifeq ($(MODE), fsanitize)
-	CFLAGS = -g3 -fsanitize=address
+	CFLAGS = -g3 -Og -fsanitize=address
 else ifeq ($(MODE), optimize)
-	CFLAGS += -O2
-else ifeq ($(MODE), full-optimize)
 	CFLAGS += -O3
+else ifeq ($(MODE), full-optimize)
+	CFLAGS += -Ofast
 else ifneq ($(MODE),)
 	ERROR = MODE
 endif

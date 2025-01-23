@@ -11,38 +11,43 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "fdf.h"
 #include "mlx.h"
 #include "neflibx.h"
 #include "rendering.h"
 #include "math.h"
+#include "utils.h"
 
 static double	deg_to_rad(double deg)
 {
 	return (deg * M_PI / 180);
 }
 
-static t_point	create_pt(t_data *data, int x, int y)
+static int	create_pt(t_data *data, int x, int y, t_point *pt)
 {
-	t_point	pt;
 	double	xd;
 	double	yd;
-	double	rad;
 	double	z;
 
-	rad = data->rad;
 	z = data->map3d[y * data->w + x].z * data->zspace;
-	pt.color = data->map3d[y * data->w + x].color;
-	x = x * data->space + data->mx;
-	y = y * data->space + data->my;
-	xd = (cos(rad) * (x - data->w / 2) - sin(rad) * (y - data->h / 2)) + data->w / 2;
-	yd = (sin(rad) * (x - data->w / 2) + cos(rad) * (y - data->h / 2)) + data->h / 2;
-	xd = xd * cos(0) + yd * cos(deg_to_rad(120)) + z * cos(-deg_to_rad(120));
-	yd = xd * sin(0) + yd * sin(deg_to_rad(120)) + z * sin(-deg_to_rad(120));
-	pt.x = (int32_t)xd;
-	pt.y = (int32_t)yd;
-	return (pt);
+	pt->color = data->map3d[y * data->w + x].color;
+	xd = (cos(data->rad) * (x - data->w / 2)
+			- sin(data->rad) * (y - data->h / 2)) + data->w / 2;
+	yd = (sin(data->rad) * (x - data->w / 2)
+			+ cos(data->rad) * (y - data->h / 2)) + data->h / 2;
+	xd = xd * data->space + data->mx;
+	yd = yd * data->space + data->my;
+	xd = xd + yd * cos(deg_to_rad(120)) + z * cos(-deg_to_rad(120));
+	yd = yd * sin(deg_to_rad(120)) + z * sin(-deg_to_rad(120));
+	pt->x = (int32_t)xd;
+	pt->y = (int32_t)yd;
+	if (pt->x < 0 || pt->x >= data->win->x)
+		return (-1);
+	if (pt->y < 0 || pt->y >= data->win->y)
+		return (-1);
+	return (0);
 }
 
 static void	draw_neighbors(t_data *data, int x, int y)
@@ -51,28 +56,33 @@ static void	draw_neighbors(t_data *data, int x, int y)
 	t_point	ptu;
 	t_point	ptl;
 
-	ptr = create_pt(data, x, y);
+	if (create_pt(data, x, y, &ptr) != 0)
+		return ;
 	if (y > 0)
 	{
-		ptu = create_pt(data, x, y - 1);
-		draw_line(ptr, ptu, data->img);
+		if (create_pt(data, x, y - 1, &ptu) == 0)
+			draw_line(ptr, ptu, data->img);
 	}
 	if (x > 0)
 	{
-		ptl = create_pt(data, x - 1, y);
-		draw_line(ptr, ptl, data->img);
+		if (create_pt(data, x - 1, y, &ptl) == 0)
+			draw_line(ptr, ptl, data->img);
 	}
 }
 
 int	render(t_data *data)
 {
-	int	i;
-	int	j;
+	int32_t	i;
+	int32_t	j;
 
-	data->mx = (data->win->x - data->w * data->space) / 2 * 2;
-	data->my = (data->win->y - data->h * data->space) / 2;
 	destroy_image(data->img);
 	data->img = create_image(data->win, data->win->x, data->win->y);
+	if (!data->img)
+	{
+		destroy_all_windows(data->display);
+		destroy_display(data->display);
+		exit_error("Image creation error", 0, freei(data->map3d));
+	}
 	i = -1;
 	while (++i < data->h)
 	{
@@ -82,7 +92,7 @@ int	render(t_data *data)
 			draw_neighbors(data, j, i);
 		}
 	}
-	// TODO: Optimize image clear
-	mlx_put_image_to_window(data->display->mlx, data->win->win, data->img->img, 0, 0);
+	mlx_put_image_to_window(data->display->mlx,
+		data->win->win, data->img->img, 0, 0);
 	return (0);
 }

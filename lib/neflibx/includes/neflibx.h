@@ -14,7 +14,7 @@
 # define NEFLIBX_H
 
 # include "mlx.h"
-# include <X11/keysym.h>
+# include <inttypes.h>
 
 typedef struct s_display	t_display;
 
@@ -51,7 +51,7 @@ typedef struct s_point
 {
 	int	x;
 	int	y;
-	int	color;
+	int32_t	color;
 }	t_point;
 
 // Display management
@@ -64,7 +64,7 @@ int				destroy_window(t_window *window);
 int				destroy_all_windows(t_display *display);
 
 // Colors
-int				get_argb(unsigned char a, unsigned char r,
+int32_t			get_argb(unsigned char a, unsigned char r,
 					unsigned char g, unsigned char b);
 unsigned char	get_a(int color);
 unsigned char	get_r(int color);
@@ -73,11 +73,11 @@ unsigned char	get_b(int color);
 
 // Image management
 t_image			*create_image(t_window *window, int width, int height);
-int				put_pixel_img(t_image *image, int x, int y, int color);
+int				put_pixel_img(t_image *image, int x, int y, int32_t color);
 int				destroy_image(t_image *image);
 
 // Graphic operations
-t_point			point(int x, int y, int color);
+t_point			point(int x, int y, int32_t color);
 int				draw_line(t_point pt1, t_point pt2, t_image *img);
 
 #endif

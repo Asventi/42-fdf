@@ -1,39 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   hooks.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pjarnac <pjarnac@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/10 14:37:07 by pjarnac           #+#    #+#             */
-/*   Updated: 2025/01/10 14:37:07 by pjarnac          ###   ########.fr       */
+/*   Created: 2025/01/23 11:04:29 by pjarnac           #+#    #+#             */
+/*   Updated: 2025/01/23 11:04:29 by pjarnac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#ifndef HOOKS_H
+# define HOOKS_H
 
-#include "errno.h"
-#include "libft.h"
+# include <X11/X.h>
 
-int	freei(void	*ptr)
-{
-	free(ptr);
-	return (0);
-}
+# include "fdf.h"
 
-void	exit_error(char *err, int code, ...)
-{
-	if (code == 0)
-	{
-		write(2, err, ft_strlen(err));
-	}
-	else
-	{
-		if (code != -1)
-			errno = code;
-		perror(err);
-	}
-	exit(EXIT_FAILURE);
-}
+int	key_hook(int keycode, t_data *data);
+int	mouse_hook(int code, int x, int y, t_data *data);
+
+#endif

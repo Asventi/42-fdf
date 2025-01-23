@@ -12,7 +12,7 @@
 
 #include "neflibx.h"
 
-t_point	point(int x, int y , int color)
+t_point	point(int x, int y , int32_t color)
 {
 	t_point	pt;
 

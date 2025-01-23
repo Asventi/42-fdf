@@ -36,7 +36,7 @@ t_image	*create_image(t_window *window, int width, int height)
 	return (image);
 }
 
-int	put_pixel_img(t_image *image, int x, int y, int color)
+int	put_pixel_img(t_image *image, int x, int y, int32_t color)
 {
 	int		i;
 	char	*dest;
